@@ -1,7 +1,7 @@
 import collections
 import numpy as np
 
-class ReplayBuffwer:
+class ReplayBuffer:
     
     def __init__(self, capacity):
         self.buffer = collections.deque(maxlen=capacity)
