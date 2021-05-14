@@ -1,5 +1,11 @@
 import torch.nn as nn
 
+from lib import agent
+from lib import buffer
+from lib import model
+from lib import wrapppers
+
+
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
 MEAN_REWARD_BOUND = 19.5
 
