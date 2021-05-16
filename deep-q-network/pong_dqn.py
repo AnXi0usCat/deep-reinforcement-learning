@@ -100,7 +100,7 @@ if __name__ == '__main__':
         # backpropogate the change in the base network
         optimizer.zero_grad()
         batch = buffer.sample(BATCH_SIZE)
-        loss = calc_loss(batch, net, tgt_net, device, AMMA)
+        loss = calc_loss(batch, net, tgt_net, device, GAMMA)
         loss.backward()
         optimizer.step()
         
