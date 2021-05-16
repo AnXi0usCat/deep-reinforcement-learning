@@ -80,7 +80,7 @@ if __name__ == '__main__':
                 frame_idx, len(total_rewards), mean_reward, epsilon))
             
             if best_mean_reward is None or best_mean_reward < mean_reward:
-                torch.save(net.state_dict(), args.env + "-best.dat")
+                torch.save(net.state_dict(), DEFAULT_ENV_NAME + "-best.dat")
                 best_mean_reward = mean_reward
                 print("Best mean reward updated %.3f -> %.3f, model saved" % (best_mean_reward, mean_reward))
             
