@@ -33,7 +33,7 @@ def calc_loss(batch, net, tgt_net, device="cpu", discount_factor=GAMMA):
     actions_t = torch.tensor(actions).to(device)
     rewards_t = torch.tensor(rewards).to(device)           
     next_states_t = torch.tensor(next_states).to(device)    
-    dones_t = torch.ByteTensor(dones_t).to(device)
+    dones_t = torch.ByteTensor(dones).to(device)
     
     state_action_values = net(states_t).gather(1, actions_t.unsqueeze(-1)).squeeze(-1)
     next_state_action_values = tgt_net(next_states_t).max(dim=1)[0]
