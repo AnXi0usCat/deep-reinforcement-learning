@@ -53,8 +53,8 @@ if __name__ == '__main__':
     env = wrappers.make_env(DEFAULT_ENV_NAME)
     
     # create the base end target networks
-    net = dqn_model.DQN(env.observation_space.shape, env.action_space.n).to(device)
-    tgt_net = dqn_model.DQN(env.observation_space.shape, env.action_space.n).to(device)
+    net = model.DQN(env.observation_space.shape, env.action_space.n).to(device)
+    tgt_net = model.DQN(env.observation_space.shape, env.action_space.n).to(device)
     
     # intialise the replay buffer and the agent
     buffer = buffer.ReplayBuffer(REPLAY_SIZE)
