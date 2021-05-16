@@ -7,7 +7,7 @@ import numpy as np
 from lib import agent
 from lib import buffer
 from lib import model
-from lib import wrapppers
+from lib import wrappers
 
 
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4"
