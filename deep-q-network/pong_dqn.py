@@ -90,7 +90,7 @@ if __name__ == '__main__':
             
         
         # if the buffer is too small, restart the loop
-        if len(buffer) > REPLAY_START_SIZE:
+        if len(buffer) < REPLAY_START_SIZE:
             continue
         
         # if 1000 episodes passed, sync the networks
