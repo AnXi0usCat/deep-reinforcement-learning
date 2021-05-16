@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-imoprt numpy as np
+import numpy as np
 
 from lib import agent
 from lib import buffer
