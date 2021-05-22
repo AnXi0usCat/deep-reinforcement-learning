@@ -4,6 +4,20 @@ Agent converts environmental states into actions
 import numpy as np
 import torch
 import torch.nn.functional as F
+from . import actions
+
+
+def defalt_state_preprocessor(states):
+    """
+    Convert list of states into the form suitable for model. By default we assume Variable
+    :param states: list of numpy arrays with states
+    :return: Variable
+    """
+    if len(states) == 1:
+        states_np = np.array(states)
+    else:
+        states_np = np.array([np.array(s, copy=False) for s in states], copy=False)
+    return torch.tensor(states_np)
 
 
 class BaseAgent:
@@ -31,14 +45,27 @@ class BaseAgent:
         raise NotImplementedError
 
 
-def defalt_state_preprocessor(states):
+class DQNAgent(BaseAgent):
     """
-    Convert list of states into the form suitable for model. By default we assume Variable
-    :param states: list of numpy arrays with states
-    :return: Variable
+    DQNAgent is a memoryless DQN agent which calculates Q values
+    from the observations and  converts them into the actions using action_selector
     """
-    if len(states) == 1:
-        states_np = np.array(states)
-    else:
-        states_np = np.array([np.array(s, copy=False) for s in states], copy=False)
-    return torch.tensor(states_np)
+    def __init__(self, dqn_model, action_selector, device="cpu", preprocessor=default_states_preprocessor):
+        self.dqn_model = dqn_model
+        self.action_selector = action_selector
+        self.preprocessor = preprocessor
+        self.device = device
+
+    @torch.no_grad()
+    def __call__(self, states, agent_states=None):
+        if agent_states is None:
+            agent_statets = [None] * len(states)
+        if self.preprocessor is not None:
+            states = self.preprocessor(states)
+            if torch.is_tensor(states):
+                states = states.to(device)
+        q_v = self.dqn_model(states)
+        q = q_v.cpu().numpy()
+        actions = self.action_selector(q)
+        return actions, agent_states
+
