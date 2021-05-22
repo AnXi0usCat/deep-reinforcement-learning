@@ -1,6 +1,7 @@
 """
 Agent converts environmental states into actions
 """
+import copy
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -69,3 +70,27 @@ class DQNAgent(BaseAgent):
         actions = self.action_selector(q)
         return actions, agent_states
 
+
+class TargetNet:
+    """
+    Wrapper around model which provides copy of it instead of trained weights
+    """
+    def __init__(self, net):
+        self.net = net
+        self.target_net = copt.deepcopy(net)
+    
+    def sync():
+        self.target_net.load_state_dict(self.net.state_dict())
+    
+    def alpha_blend(self, alpha):
+        """
+        Blend params of target net with params from the model
+        :param alpha:
+        """
+        assert isinstance(alpha, float)
+        assert 0.0 < alpha <= 1.0
+        state = self.net.state_dict()
+        tgt_state = self.target_net.state_dict()
+        for k, v in state.items():
+            tgt_state[k] = tgt_state[k] * alpha + (1 - alpha) * v
+        self.target_net.load_state_dict(tgt_state)
