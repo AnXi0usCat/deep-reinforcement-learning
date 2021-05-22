@@ -29,3 +29,16 @@ class BaseAgent:
         assert len(agent_states) == len(states)
 
         raise NotImplementedError
+
+
+def defalt_state_preprocessor(states):
+    """
+    Convert list of states into the form suitable for model. By default we assume Variable
+    :param states: list of numpy arrays with states
+    :return: Variable
+    """
+    if len(states) == 1:
+        states_np = np.array(states)
+    else:
+        states_np = np.array([np.array(s, copy=False) for s in states], copy=False)
+    return torch.tensor(states_np)
