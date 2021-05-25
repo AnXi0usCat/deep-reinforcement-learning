@@ -2,7 +2,7 @@ import collections
 from agent import BaseAgent
 
 # one single experience step
-Experience = namedtuple('Experience', ['state', 'action', 'reward', 'done'])
+Experience = collections.namedtuple('Experience', ['state', 'action', 'reward', 'done'])
 
 
 def _group_list(items, lens):
