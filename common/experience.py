@@ -1,8 +1,9 @@
-from .agent import BaseAgent
-from .common import utils
+import gym
+import collections
+from agent import BaseAgent
 
 # one single experience step
-Experience = namedtuple('Experience', ['state', 'action', 'reward', 'done'])
+Experience = collections.namedtuple('Experience', ['state', 'action', 'reward', 'done'])
 
 
 def _group_list(items, lens):
@@ -77,11 +78,11 @@ class ExperienceSource:
                 states.append(obs)
             env_lens.append(obs_len)
             
-            for _ range(obs_len):
-                histories.append(deque(maxlen=self.steps_count))
+            for _ in range(obs_len):
+                histories.append(collections.deque(maxlen=self.steps_count))
                 cur_rewards.append(0.0)
                 cur_steps.append(0)
-                agent.states.append(self.agent.initial_state())
+                agent_states.append(self.agent.initial_state())
         
         iter_idx = 0
         while True:
@@ -108,10 +109,10 @@ class ExperienceSource:
             global_ofs = 0
             for env_idx, (env, action_n) in enumerate(zip(self.pool, grouped_actions)):
                 if self.vectorized:
-                    next_state_n, r_n, is_done_n = env.step(action_n)
+                    next_state_n, r_n, is_done_n, _ = env.step(action_n)
                 else:
-                    next_state, r, is_done = env.step(action_n)
-                    next_state_n, r_n, id_done_n = [ext_state], [r], [is_done]
+                    next_state, r, is_done, _ = env.step(action_n[0])
+                    next_state_n, r_n, id_done_n = [next_state], [r], [is_done]
             
                 for ofs, (action, next_state, r, is_done) in enumerate(zip(action_n, next_state_n, r_n, id_done_n)):
                     idx = global_ofs + ofs
@@ -185,4 +186,3 @@ class ExperienceSourceFirstLast(ExperienceSource):
 
             yield ExperienceFirstLast(state=exp[0].state, action=exp[0].action, 
                                       reward=total_reward, last_state=last_state)
-                
