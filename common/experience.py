@@ -79,7 +79,7 @@ class ExperienceSource:
             env_lens.append(obs_len)
             
             for _ in range(obs_len):
-                histories.append(deque(maxlen=self.steps_count))
+                histories.append(collections.deque(maxlen=self.steps_count))
                 cur_rewards.append(0.0)
                 cur_steps.append(0)
                 agent.states.append(self.agent.initial_state())
