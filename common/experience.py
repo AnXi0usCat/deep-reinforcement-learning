@@ -112,7 +112,7 @@ class ExperienceSource:
                     next_state_n, r_n, is_done_n, _ = env.step(action_n)
                 else:
                     next_state, r, is_done, _ = env.step(action_n[0])
-                    next_state_n, r_n, id_done_n = [ext_state], [r], [is_done]
+                    next_state_n, r_n, id_done_n = [next_state], [r], [is_done]
             
                 for ofs, (action, next_state, r, is_done) in enumerate(zip(action_n, next_state_n, r_n, id_done_n)):
                     idx = global_ofs + ofs
