@@ -1,5 +1,4 @@
-from .agent import BaseAgent
-from .common import utils
+from agent import BaseAgent
 
 # one single experience step
 Experience = namedtuple('Experience', ['state', 'action', 'reward', 'done'])
@@ -185,4 +184,3 @@ class ExperienceSourceFirstLast(ExperienceSource):
 
             yield ExperienceFirstLast(state=exp[0].state, action=exp[0].action, 
                                       reward=total_reward, last_state=last_state)
-                
