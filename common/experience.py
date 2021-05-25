@@ -1,3 +1,4 @@
+from collections import namedtuple
 from agent import BaseAgent
 
 # one single experience step
