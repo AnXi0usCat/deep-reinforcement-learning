@@ -82,7 +82,7 @@ class ExperienceSource:
                 histories.append(collections.deque(maxlen=self.steps_count))
                 cur_rewards.append(0.0)
                 cur_steps.append(0)
-                agent.states.append(self.agent.initial_state())
+                agent_states.append(self.agent.initial_state())
         
         iter_idx = 0
         while True:
