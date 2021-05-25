@@ -1,3 +1,4 @@
+import gym
 import collections
 from agent import BaseAgent
 
