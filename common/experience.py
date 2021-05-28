@@ -206,7 +206,7 @@ class ExperienceReplayBuffer:
         return iter(self.buffer)
 
     def _add(self, entry):
-        if len(sef.buffer) < self.capacity:
+        if len(self.buffer) < self.capacity:
             self.buffer.append(entry)
         else:
             self.buffer[self.position] = sample
