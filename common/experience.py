@@ -225,7 +225,7 @@ class ExperienceReplayBuffer:
         """
         Populates sample freom expereice source iunto the buffer
         """
-        for _ in range(n_itmes):
+        for _ in range(n_items):
             entry = next(self.experience_source_iter)
             self._add(entry)
     
