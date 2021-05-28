@@ -203,10 +203,10 @@ class ExperienceReplayBuffer:
         return len(self.buffer)
 
     def __iter__(self):
-        retrun iter(self.buffer)
+        return iter(self.buffer)
 
     def _add(self, entry):
-        if len(sef.buffer) < self.capacity:
+        if len(self.buffer) < self.capacity:
             self.buffer.append(entry)
         else:
             self.buffer[self.position] = sample
@@ -216,7 +216,7 @@ class ExperienceReplayBuffer:
         """
         Get a random sample of size sample_size from the buffer
         """
-        if len(self.buffer) < self.capacity:
+        if len(self.buffer) <= sample_size:
             return self.buffer
         keys = np.random.choice(len(self.buffer), sample_size, replace=True)
         return [self.buffer[key] for key in keys]
@@ -225,7 +225,7 @@ class ExperienceReplayBuffer:
         """
         Populates sample freom expereice source iunto the buffer
         """
-        for _ in range(n_itmes):
+        for _ in range(n_items):
             entry = next(self.experience_source_iter)
             self._add(entry)
     
