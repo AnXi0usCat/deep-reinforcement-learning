@@ -203,7 +203,7 @@ class ExperienceReplayBuffer:
         return len(self.buffer)
 
     def __iter__(self):
-        retrun iter(self.buffer)
+        return iter(self.buffer)
 
     def _add(self, entry):
         if len(sef.buffer) < self.capacity:
