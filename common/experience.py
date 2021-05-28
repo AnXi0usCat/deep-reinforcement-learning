@@ -1,5 +1,6 @@
 import gym
 import collections
+import numpy as np
 from agent import BaseAgent
 
 # one single experience step
@@ -186,3 +187,45 @@ class ExperienceSourceFirstLast(ExperienceSource):
 
             yield ExperienceFirstLast(state=exp[0].state, action=exp[0].action, 
                                       reward=total_reward, last_state=last_state)
+
+
+class ExperienceReplayBuffer:
+
+    def __init__(self, experience_source, buffer_size):
+        assert isinstance(experience_source, (ExperienceSource, type(None)))
+        assert isinstance(buffer_size, int)
+        self.experience_source_iter = None if experience_source is None else iter(experience_source)
+        self.buffer = []
+        self.capacity = buffer_size
+        self.position = 0
+
+    def __len__(self):
+        return len(self.buffer)
+
+    def __iter__(self):
+        retrun iter(self.buffer)
+
+    def _add(self, entry):
+        if len(sef.buffer) < self.capacity:
+            self.buffer.append(entry)
+        else:
+            self.buffer[self.position] = sample
+            self.position = (self.position + 1) % self.capacity
+
+    def sample(self, sample_size):
+        """
+        Get a random sample of size sample_size from the buffer
+        """
+        if len(self.buffer) < self.capacity:
+            return self.buffer
+        keys = np.random.choice(len(self.buffer), sample_size, replace=True)
+        return [self.buffer[key] for key in keys]
+
+    def populate(self, n_items):
+        """
+        Populates sample freom expereice source iunto the buffer
+        """
+        for _ in range(n_itmes):
+            entry = next(self.experience_source_iter)
+            self._add(entry)
+    
