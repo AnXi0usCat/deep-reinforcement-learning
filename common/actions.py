@@ -1,4 +1,5 @@
 import numpy as np
+import time
 import abc
 from typing import Union
 
@@ -73,3 +74,36 @@ class EpsilonTracker:
     def frame(self, frame: int):
         eps = self.eps_start - frame / self.eps_frame
         self.selector.epsilon = max(self.eps_final, eps)
+
+
+class RewardTracker:
+    """
+    A Context manager that prints out the mean reward received
+    by the agent over a period of time
+    """
+    
+    def __init__(self, stop_reward):
+        self.stop_reward = stop_reward
+
+    def __enter__(self):
+        self.ts = time.time()
+        self.ts_frame = 0
+        self.total_rewards = []
+        return self
+
+    def __exit__(self, *args):
+        pass
+
+    def reward(self, reward, frame, epsilon=None):
+        self.total_rewards.append(reward)
+        speed = (frame - self.ts_frame) / (time.time() - self.ts)
+        self.ts = time.time()
+        mean_reward = np.mean(self.total_rewards[-100:])
+        epslilon_str = '' if epsilon is None else ', eps %.2f' % epsilon
+        print("%d: done %d games, mean reward %.3f, speed %.2f f/s%s" % (
+            frame, len(self.total_rewards), mean_reward, speed, epsilon_str
+        ))
+        if mean_reward > self.stop_reward:
+            print("Solved in %d frames!" % frame)
+            return True
+        return False
