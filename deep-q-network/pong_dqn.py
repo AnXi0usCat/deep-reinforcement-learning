@@ -42,7 +42,7 @@ def calc_loss(batch, net, tgt_net, device="cpu", discount_factor=GAMMA):
     
     expected_state_action_values = rewards_t + discount_factor * next_state_action_values
     
-    return nn.MSELoss(state_action_values, expected_state_action_values)
+    return nn.MSELoss()(state_action_values, expected_state_action_values)
 
 
 if __name__ == '__main__':
@@ -103,12 +103,3 @@ if __name__ == '__main__':
         loss = calc_loss(batch, net, tgt_net, device, GAMMA)
         loss.backward()
         optimizer.step()
-        
-    
-    
-    
-    
-    
-    
-    
-    
