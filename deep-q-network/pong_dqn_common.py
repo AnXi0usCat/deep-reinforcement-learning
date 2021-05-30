@@ -51,10 +51,7 @@ def unpack_batch(batch):
             lstate = np.array(exp.last_state)
         last_states.append(lstate)
             
-    return np.array(states, copy=False), np.array(actions), \ 
-           np.array(rewards, dtype=np.float32), \
-           np.array(dones, dtype=np.uint8), \
-           np.array(last_states, copy=False)
+    return np.array(states, copy=False), np.array(actions), np.array(rewards, dtype=np.float32), np.array(dones, dtype=np.uint8), np.array(last_states, copy=False)
 
 
 def calc_loss_dqn(batch, net, tgt_net, gamma, device="cpu"):
@@ -130,6 +127,14 @@ def setup_ignite(engine: Engine, params: SimpleNamespace,
         output_transform=lambda a: a)
     event = ptan_ignite.PeriodEvents.ITERS_100_COMPLETED
     tb.attach(engine, log_handler=handler, event_name=event)
+
+
+def batch_generator(buffer: ptan.experience.ExperienceReplayBuffer,
+                    initial: int, batch_size: int):
+    buffer.populate(initial)
+    while True:
+        buffer.populate(1)
+        yield buffer.sample(batch_size)
     
 
 class EpsilonTracker:
@@ -190,6 +195,6 @@ if __name__ == '__main__':
 
     engine = Engine(process_batch)
     common.setup_ignite(engine, params, exp_source, NAME)
-    engine.run(common.batch_generator(buffer, params.replay_initial,
+    engine.run(batch_generator(buffer, params.replay_initial,
                                       params.batch_size))
     
