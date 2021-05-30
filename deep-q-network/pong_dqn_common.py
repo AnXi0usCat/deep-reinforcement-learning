@@ -4,6 +4,8 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 from types import SimpleNamespace
+from typing import Iterable, Tuple, List
+
 import ptan
 import ptan.ignite as ptan_ignite
 from ignite.engine import Engine
