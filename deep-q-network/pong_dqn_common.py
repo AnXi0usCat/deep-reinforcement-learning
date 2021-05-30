@@ -1,9 +1,11 @@
 import torch
 import torch.nn as nn
 import numpy as np
-
 from types import SimpleNamespace
+import ptan
 
+
+SEED = 123
 
 HYPERPARAMS = {
     'pong': SimpleNamespace(**{
@@ -66,3 +68,26 @@ def calc_loss_dqn(batch, net, tgt_net, gamma, device="cpu"):
     
     expected_action_vals = next_state_vals.detach() * gamma + rewards_v
     return nn.MSELoss()(state_action_vals, expected_action_vals)
+
+
+class EpsilonTracker:
+    
+    def __init__(self, selector: ptan.actions.EpsilonGreedyActionSelector,
+                 params: SimpleNamespace):
+        self.selector = selector
+        self.params = params
+        self.frame(0)
+
+    def frame(self, frame_idx: int):
+        eps = self.params.epsilon_start - \
+              (frame_idx / self.params.epsilon_frames)
+        self.selector.epsilon = max(self.params.epsilon_final, eps)
+
+
+if __name__ == '__main__':
+
+    random.seed(SEED)
+    torch.manual_seed(SEED)
+    
+    
+    
